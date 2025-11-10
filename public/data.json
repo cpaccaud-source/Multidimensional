@@ -1,0 +1,190 @@
+{
+  "dimensions": [
+    { "id": "time", "name": "Time", "kind": "datetime" },
+    { "id": "company", "name": "Company", "kind": "categorical" },
+    { "id": "eventType", "name": "Event Type", "kind": "categorical" },
+    { "id": "score", "name": "Score", "kind": "numeric" }
+  ],
+  "nodes": [
+    {
+      "id": "node-001",
+      "label": "TNXP – FastTrack granted",
+      "dimensions": {
+        "time": "2025-01-12",
+        "company": "TNXP",
+        "eventType": "Regulatory",
+        "score": 0.82
+      }
+    },
+    {
+      "id": "node-002",
+      "label": "ABCL – Phase 2 results",
+      "dimensions": {
+        "time": "2025-02-03",
+        "company": "ABCL",
+        "eventType": "Clinical",
+        "score": 0.76
+      }
+    },
+    {
+      "id": "node-003",
+      "label": "LENZ – Partnership announcement",
+      "dimensions": {
+        "time": "2025-02-18",
+        "company": "LENZ",
+        "eventType": "Business",
+        "score": 0.68
+      }
+    },
+    {
+      "id": "node-004",
+      "label": "XBIO – Manufacturing scale-up",
+      "dimensions": {
+        "time": "2025-03-01",
+        "company": "XBIO",
+        "eventType": "Operations",
+        "score": 0.71
+      }
+    },
+    {
+      "id": "node-005",
+      "label": "QGEN – CEO interview",
+      "dimensions": {
+        "time": "2025-03-15",
+        "company": "QGEN",
+        "eventType": "Media",
+        "score": 0.55
+      }
+    },
+    {
+      "id": "node-006",
+      "label": "TNXP – Phase 3 enrollment",
+      "dimensions": {
+        "time": "2025-03-28",
+        "company": "TNXP",
+        "eventType": "Clinical",
+        "score": 0.83
+      }
+    },
+    {
+      "id": "node-007",
+      "label": "ABCL – Strategic partnership",
+      "dimensions": {
+        "time": "2025-04-07",
+        "company": "ABCL",
+        "eventType": "Business",
+        "score": 0.74
+      }
+    },
+    {
+      "id": "node-008",
+      "label": "LENZ – Patent granted",
+      "dimensions": {
+        "time": "2025-04-21",
+        "company": "LENZ",
+        "eventType": "Regulatory",
+        "score": 0.66
+      }
+    },
+    {
+      "id": "node-009",
+      "label": "XBIO – Quarterly earnings",
+      "dimensions": {
+        "time": "2025-05-05",
+        "company": "XBIO",
+        "eventType": "Financial",
+        "score": 0.58
+      }
+    },
+    {
+      "id": "node-010",
+      "label": "QGEN – R&D day",
+      "dimensions": {
+        "time": "2025-05-18",
+        "company": "QGEN",
+        "eventType": "Media",
+        "score": 0.6
+      }
+    },
+    {
+      "id": "node-011",
+      "label": "TNXP – Manufacturing update",
+      "dimensions": {
+        "time": "2025-06-02",
+        "company": "TNXP",
+        "eventType": "Operations",
+        "score": 0.79
+      }
+    },
+    {
+      "id": "node-012",
+      "label": "ABCL – Regulatory submission",
+      "dimensions": {
+        "time": "2025-06-15",
+        "company": "ABCL",
+        "eventType": "Regulatory",
+        "score": 0.81
+      }
+    },
+    {
+      "id": "node-013",
+      "label": "LENZ – Investor briefing",
+      "dimensions": {
+        "time": "2025-07-01",
+        "company": "LENZ",
+        "eventType": "Financial",
+        "score": 0.62
+      }
+    },
+    {
+      "id": "node-014",
+      "label": "XBIO – Clinical hold lifted",
+      "dimensions": {
+        "time": "2025-07-19",
+        "company": "XBIO",
+        "eventType": "Regulatory",
+        "score": 0.77
+      }
+    },
+    {
+      "id": "node-015",
+      "label": "QGEN – Strategic acquisition",
+      "dimensions": {
+        "time": "2025-08-04",
+        "company": "QGEN",
+        "eventType": "Business",
+        "score": 0.73
+      }
+    },
+    {
+      "id": "node-016",
+      "label": "TNXP – Advisory board formed",
+      "dimensions": {
+        "time": "2025-08-21",
+        "company": "TNXP",
+        "eventType": "Business",
+        "score": 0.69
+      }
+    },
+    {
+      "id": "node-017",
+      "label": "ABCL – Supply chain update",
+      "dimensions": {
+        "time": "2025-09-03",
+        "company": "ABCL",
+        "eventType": "Operations",
+        "score": 0.64
+      }
+    },
+    {
+      "id": "node-018",
+      "label": "LENZ – Community outreach",
+      "dimensions": {
+        "time": "2025-09-19",
+        "company": "LENZ",
+        "eventType": "Media",
+        "score": 0.52
+      }
+    }
+  ]
+}

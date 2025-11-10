@@ -1,0 +1,79 @@
+.app-shell {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  min-height: 100vh;
+  gap: 1px;
+  background-color: #d9e2ec;
+}
+
+.panel {
+  background-color: #ffffff;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.panel h2 {
+  margin-top: 0;
+}
+
+.placeholder {
+  margin: auto;
+  text-align: center;
+  color: #52606d;
+}
+
+.dimensions-info {
+  margin-top: auto;
+  font-size: 0.85rem;
+  color: #829ab1;
+  border-top: 1px solid #e4edf2;
+  padding-top: 0.75rem;
+}
+
+.dimension-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #f0f4f8;
+}
+
+.dimension-item:last-of-type {
+  border-bottom: none;
+}
+
+.dimension-item label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  cursor: pointer;
+}
+
+.dimension-kind {
+  font-size: 0.8rem;
+  color: #829ab1;
+}
+
+.notice {
+  background-color: #fde68a;
+  color: #92400e;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid #fbbf24;
+}
+
+.error {
+  background-color: #fee2e2;
+  color: #991b1b;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid #fecaca;
+}
+
+.dimension-item label span:first-of-type {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
