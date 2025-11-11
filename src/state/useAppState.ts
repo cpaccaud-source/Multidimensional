@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useSyncExternalStore } from "react";
 import { loadData } from "../data/loadData";
 import type { AppState } from "../model/types";
 
@@ -17,81 +17,142 @@ const initialState: AppState = {
   selectedNodeId: null,
 };
 
-export function useAppState(): UseAppStateValue {
-  const [state, setState] = useState<AppState>(initialState);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [attemptedThirdDimension, setAttemptedThirdDimension] = useState(false);
+interface Store {
+  state: AppState;
+  isLoading: boolean;
+  error: string | null;
+  attemptedThirdDimension: boolean;
+}
 
-  useEffect(() => {
-    let mounted = true;
+let store: Store = {
+  state: initialState,
+  isLoading: true,
+  error: null,
+  attemptedThirdDimension: false,
+};
 
-    loadData()
-      .then((data) => {
-        if (!mounted) {
-          return;
-        }
-        setState((prev) => ({
-          ...prev,
+type Listener = () => void;
+
+const listeners = new Set<Listener>();
+
+const notify = () => {
+  listeners.forEach((listener) => listener());
+};
+
+function setStore(updater: (prev: Store) => Store) {
+  const next = updater(store);
+  const changed =
+    next.state !== store.state ||
+    next.isLoading !== store.isLoading ||
+    next.error !== store.error ||
+    next.attemptedThirdDimension !== store.attemptedThirdDimension;
+
+  store = next;
+
+  if (changed) {
+    notify();
+  }
+}
+
+const subscribe = (listener: Listener) => {
+  listeners.add(listener);
+  return () => {
+    listeners.delete(listener);
+  };
+};
+
+const getSnapshot = () => store;
+
+let dataLoadStarted = false;
+
+function ensureDataLoaded() {
+  if (dataLoadStarted) {
+    return;
+  }
+  dataLoadStarted = true;
+
+  loadData()
+    .then((data) => {
+      setStore((prev) => ({
+        ...prev,
+        state: {
+          ...prev.state,
           nodes: data.nodes,
           dimensions: data.dimensions,
-          selectedNodeId: prev.selectedNodeId ?? data.nodes[0]?.id ?? null,
-        }));
-        setIsLoading(false);
-      })
-      .catch((err: unknown) => {
-        if (!mounted) {
-          return;
-        }
-        setError(err instanceof Error ? err.message : String(err));
-        setIsLoading(false);
-      });
+          selectedNodeId: prev.state.selectedNodeId ?? data.nodes[0]?.id ?? null,
+        },
+        isLoading: false,
+        error: null,
+      }));
+    })
+    .catch((err: unknown) => {
+      setStore((prev) => ({
+        ...prev,
+        isLoading: false,
+        error: err instanceof Error ? err.message : String(err),
+      }));
+    });
+}
 
-    return () => {
-      mounted = false;
-    };
-  }, []);
+const toggleDimension = (dimensionId: string) => {
+  setStore((prev) => {
+    const alreadySelected = prev.state.selectedDimensions.includes(dimensionId);
 
-  const toggleDimension = (dimensionId: string) => {
-    setState((prev) => {
-      const alreadySelected = prev.selectedDimensions.includes(dimensionId);
-      if (alreadySelected) {
-        setAttemptedThirdDimension(false);
-        return {
-          ...prev,
-          selectedDimensions: prev.selectedDimensions.filter((id) => id !== dimensionId),
-        };
-      }
-
-      if (prev.selectedDimensions.length >= 2) {
-        setAttemptedThirdDimension(true);
-        return prev;
-      }
-
-      setAttemptedThirdDimension(false);
+    if (alreadySelected) {
       return {
         ...prev,
-        selectedDimensions: [...prev.selectedDimensions, dimensionId],
+        attemptedThirdDimension: false,
+        state: {
+          ...prev.state,
+          selectedDimensions: prev.state.selectedDimensions.filter((id) => id !== dimensionId),
+        },
       };
-    });
-  };
+    }
 
-  const selectNode = (nodeId: string | null) => {
-    setState((prev) => ({
+    if (prev.state.selectedDimensions.length >= 2) {
+      if (prev.attemptedThirdDimension) {
+        return prev;
+      }
+      return {
+        ...prev,
+        attemptedThirdDimension: true,
+      };
+    }
+
+    return {
       ...prev,
-      selectedNodeId: nodeId,
-    }));
-  };
+      attemptedThirdDimension: false,
+      state: {
+        ...prev.state,
+        selectedDimensions: [...prev.state.selectedDimensions, dimensionId],
+      },
+    };
+  });
+};
 
-  return useMemo(
-    () => ({
-      ...state,
-      isLoading,
-      error,
-      attemptedThirdDimension,
-      toggleDimension,
-      selectNode,
-    }),
-    [state, isLoading, error, attemptedThirdDimension]
-  );
+const selectNode = (nodeId: string | null) => {
+  setStore((prev) => ({
+    ...prev,
+    state: {
+      ...prev.state,
+      selectedNodeId: nodeId,
+    },
+  }));
+};
+
+export function useAppState(): UseAppStateValue {
+  useEffect(() => {
+    ensureDataLoaded();
+  }, []);
+
+  const snapshot = useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
+
+  return {
+    ...snapshot.state,
+    isLoading: snapshot.isLoading,
+    error: snapshot.error,
+    attemptedThirdDimension: snapshot.attemptedThirdDimension,
+    toggleDimension,
+    selectNode,
+  };
 }
