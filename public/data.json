@@ -3,187 +3,441 @@
     { "id": "time", "name": "Time", "kind": "datetime" },
     { "id": "company", "name": "Company", "kind": "categorical" },
     { "id": "eventType", "name": "Event Type", "kind": "categorical" },
-    { "id": "score", "name": "Score", "kind": "numeric" }
+    { "id": "score", "name": "Score", "kind": "numeric" },
+    { "id": "source", "name": "Source", "kind": "categorical" },
+    { "id": "impact", "name": "Impact", "kind": "numeric" }
   ],
   "nodes": [
     {
       "id": "node-001",
       "label": "TNXP – FastTrack granted",
       "dimensions": {
-        "time": "2025-01-12",
+        "time": "2024-11-05",
         "company": "TNXP",
-        "eventType": "Regulatory",
-        "score": 0.82
+        "eventType": "FastTrack",
+        "score": 0.86,
+        "source": "FDA",
+        "impact": 78
       }
     },
     {
       "id": "node-002",
-      "label": "ABCL – Phase 2 results",
+      "label": "TNXP – Phase 3 interim data",
       "dimensions": {
-        "time": "2025-02-03",
-        "company": "ABCL",
-        "eventType": "Clinical",
-        "score": 0.76
+        "time": "2025-02-14",
+        "company": "TNXP",
+        "eventType": "Phase 3 readout",
+        "score": 0.74,
+        "source": "Company PR",
+        "impact": 65
       }
     },
     {
       "id": "node-003",
-      "label": "LENZ – Partnership announcement",
+      "label": "TNXP – Financing round closed",
       "dimensions": {
-        "time": "2025-02-18",
-        "company": "LENZ",
-        "eventType": "Business",
-        "score": 0.68
+        "time": "2025-05-08",
+        "company": "TNXP",
+        "eventType": "Financing",
+        "score": 0.58,
+        "source": "PR Newswire",
+        "impact": 52
       }
     },
     {
       "id": "node-004",
-      "label": "XBIO – Manufacturing scale-up",
+      "label": "TNXP – Manufacturing audit delayed",
       "dimensions": {
-        "time": "2025-03-01",
-        "company": "XBIO",
-        "eventType": "Operations",
-        "score": 0.71
+        "time": "2025-07-19",
+        "company": "TNXP",
+        "eventType": "Regulatory",
+        "score": null,
+        "source": "Company PR",
+        "impact": 40
       }
     },
     {
       "id": "node-005",
-      "label": "QGEN – CEO interview",
+      "label": "TNXP – Global partnership announced",
       "dimensions": {
-        "time": "2025-03-15",
-        "company": "QGEN",
-        "eventType": "Media",
-        "score": 0.55
+        "time": "2025-09-22",
+        "company": "TNXP",
+        "eventType": "Partnership",
+        "score": 0.69,
+        "source": "Business Wire",
+        "impact": 72
       }
     },
     {
       "id": "node-006",
-      "label": "TNXP – Phase 3 enrollment",
+      "label": "TNXP – Phase 2 biomarker update",
       "dimensions": {
-        "time": "2025-03-28",
+        "time": "2026-01-16",
         "company": "TNXP",
-        "eventType": "Clinical",
-        "score": 0.83
+        "eventType": "Phase 2 readout",
+        "score": 0.63,
+        "source": "Investor Deck",
+        "impact": 55
       }
     },
     {
       "id": "node-007",
-      "label": "ABCL – Strategic partnership",
+      "label": "ABCL – Regulatory submission accepted",
       "dimensions": {
-        "time": "2025-04-07",
+        "time": "2024-10-18",
         "company": "ABCL",
-        "eventType": "Business",
-        "score": 0.74
+        "eventType": "Regulatory",
+        "score": 0.79,
+        "source": "FDA",
+        "impact": 70
       }
     },
     {
       "id": "node-008",
-      "label": "LENZ – Patent granted",
+      "label": "ABCL – Phase 2 efficacy win",
       "dimensions": {
-        "time": "2025-04-21",
-        "company": "LENZ",
-        "eventType": "Regulatory",
-        "score": 0.66
+        "time": "2025-01-28",
+        "company": "ABCL",
+        "eventType": "Phase 2 readout",
+        "score": 0.82,
+        "source": "Company PR",
+        "impact": 83
       }
     },
     {
       "id": "node-009",
-      "label": "XBIO – Quarterly earnings",
+      "label": "ABCL – Strategic partnership",
       "dimensions": {
-        "time": "2025-05-05",
-        "company": "XBIO",
-        "eventType": "Financial",
-        "score": 0.58
+        "time": "2025-04-11",
+        "company": "ABCL",
+        "eventType": "Partnership",
+        "score": 0.68,
+        "source": "Business Wire",
+        "impact": 61
       }
     },
     {
       "id": "node-010",
-      "label": "QGEN – R&D day",
+      "label": "ABCL – Follow-on financing",
       "dimensions": {
-        "time": "2025-05-18",
-        "company": "QGEN",
-        "eventType": "Media",
-        "score": 0.6
+        "time": "2025-08-03",
+        "company": "ABCL",
+        "eventType": "Financing",
+        "score": 0.52,
+        "source": "SEC Filing",
+        "impact": 48
       }
     },
     {
       "id": "node-011",
-      "label": "TNXP – Manufacturing update",
+      "label": "ABCL – Phase 3 survival benefit",
       "dimensions": {
-        "time": "2025-06-02",
-        "company": "TNXP",
-        "eventType": "Operations",
-        "score": 0.79
+        "time": "2025-11-19",
+        "company": "ABCL",
+        "eventType": "Phase 3 readout",
+        "score": 0.75,
+        "source": "Company PR",
+        "impact": 77
       }
     },
     {
       "id": "node-012",
-      "label": "ABCL – Regulatory submission",
+      "label": "LENZ – EMA label expansion",
       "dimensions": {
-        "time": "2025-06-15",
-        "company": "ABCL",
+        "time": "2024-09-07",
+        "company": "LENZ",
         "eventType": "Regulatory",
-        "score": 0.81
+        "score": 0.66,
+        "source": "EMA",
+        "impact": 64
       }
     },
     {
       "id": "node-013",
-      "label": "LENZ – Investor briefing",
+      "label": "LENZ – Autoimmune alliance",
       "dimensions": {
-        "time": "2025-07-01",
+        "time": "2025-02-22",
         "company": "LENZ",
-        "eventType": "Financial",
-        "score": 0.62
+        "eventType": "Partnership",
+        "score": 0.71,
+        "source": "Company PR",
+        "impact": 69
       }
     },
     {
       "id": "node-014",
-      "label": "XBIO – Clinical hold lifted",
+      "label": "LENZ – Phase 2 biomarker data",
       "dimensions": {
-        "time": "2025-07-19",
-        "company": "XBIO",
-        "eventType": "Regulatory",
-        "score": 0.77
+        "time": "2025-05-30",
+        "company": "LENZ",
+        "eventType": "Phase 2 readout",
+        "score": 0.59,
+        "source": "Conference Abstract",
+        "impact": 58
       }
     },
     {
       "id": "node-015",
-      "label": "QGEN – Strategic acquisition",
+      "label": "LENZ – Convertible financing",
       "dimensions": {
-        "time": "2025-08-04",
-        "company": "QGEN",
-        "eventType": "Business",
-        "score": 0.73
+        "time": "2025-07-12",
+        "company": "LENZ",
+        "eventType": "Financing",
+        "score": 0.45,
+        "source": "Investor Call",
+        "impact": 43
       }
     },
     {
       "id": "node-016",
-      "label": "TNXP – Advisory board formed",
+      "label": "LENZ – FastTrack designation",
       "dimensions": {
-        "time": "2025-08-21",
-        "company": "TNXP",
-        "eventType": "Business",
-        "score": 0.69
+        "time": "2025-10-09",
+        "company": "LENZ",
+        "eventType": "FastTrack",
+        "score": 0.81,
+        "source": "FDA",
+        "impact": 85
       }
     },
     {
       "id": "node-017",
-      "label": "ABCL – Supply chain update",
+      "label": "VERU – Oncology co-development",
       "dimensions": {
-        "time": "2025-09-03",
-        "company": "ABCL",
-        "eventType": "Operations",
-        "score": 0.64
+        "time": "2024-12-02",
+        "company": "VERU",
+        "eventType": "Partnership",
+        "score": 0.62,
+        "source": "PR Newswire",
+        "impact": 60
       }
     },
     {
       "id": "node-018",
-      "label": "LENZ – Community outreach",
+      "label": "VERU – Safety update filed",
       "dimensions": {
-        "time": "2025-09-19",
-        "company": "LENZ",
-        "eventType": "Media",
-        "score": 0.52
+        "time": "2025-03-14",
+        "company": "VERU",
+        "eventType": "Regulatory",
+        "score": 0.54,
+        "source": null,
+        "impact": 50
+      }
+    },
+    {
+      "id": "node-019",
+      "label": "VERU – Phase 3 survival data",
+      "dimensions": {
+        "time": "2025-06-25",
+        "company": "VERU",
+        "eventType": "Phase 3 readout",
+        "score": 0.77,
+        "source": "Conference Abstract",
+        "impact": 82
+      }
+    },
+    {
+      "id": "node-020",
+      "label": "VERU – Investor Q&A session",
+      "dimensions": {
+        "time": "2025-09-18",
+        "company": "VERU",
+        "eventType": null,
+        "score": 0.38,
+        "source": "Investor Call",
+        "impact": 36
+      }
+    },
+    {
+      "id": "node-021",
+      "label": "VERU – Breakthrough FastTrack",
+      "dimensions": {
+        "time": "2026-01-05",
+        "company": "VERU",
+        "eventType": "FastTrack",
+        "score": 0.88,
+        "source": "FDA",
+        "impact": 90
+      }
+    },
+    {
+      "id": "node-022",
+      "label": "PMN – Health Canada review",
+      "dimensions": {
+        "time": "2024-08-21",
+        "company": "PMN",
+        "eventType": "Regulatory",
+        "score": 0.57,
+        "source": "Health Canada",
+        "impact": 55
+      }
+    },
+    {
+      "id": "node-023",
+      "label": "PMN – Debt financing",
+      "dimensions": {
+        "time": "2024-12-15",
+        "company": "PMN",
+        "eventType": "Financing",
+        "score": 0.49,
+        "source": "Investor Call",
+        "impact": 44
+      }
+    },
+    {
+      "id": "node-024",
+      "label": "PMN – Manufacturing partner",
+      "dimensions": {
+        "time": "2025-04-04",
+        "company": "PMN",
+        "eventType": "Partnership",
+        "score": 0.73,
+        "source": "Company PR",
+        "impact": null
+      }
+    },
+    {
+      "id": "node-025",
+      "label": "PMN – Phase 2 cognitive data",
+      "dimensions": {
+        "time": "2025-07-27",
+        "company": "PMN",
+        "eventType": "Phase 2 readout",
+        "score": 0.61,
+        "source": "Conference Abstract",
+        "impact": 59
+      }
+    },
+    {
+      "id": "node-026",
+      "label": "PMN – Phase 3 enrollment milestones",
+      "dimensions": {
+        "time": "2025-11-08",
+        "company": "PMN",
+        "eventType": "Phase 3 readout",
+        "score": 0.80,
+        "source": "Company PR",
+        "impact": 84
+      }
+    },
+    {
+      "id": "node-027",
+      "label": "XBIO – FDA meeting minutes",
+      "dimensions": {
+        "time": "2024-07-11",
+        "company": "XBIO",
+        "eventType": "Regulatory",
+        "score": 0.64,
+        "source": "FDA",
+        "impact": 62
+      }
+    },
+    {
+      "id": "node-028",
+      "label": "XBIO – Manufacturing collaboration",
+      "dimensions": {
+        "time": "2024-10-29",
+        "company": "XBIO",
+        "eventType": "Partnership",
+        "score": 0.55,
+        "source": "Business Wire",
+        "impact": 53
+      }
+    },
+    {
+      "id": "node-029",
+      "label": "XBIO – Secondary offering",
+      "dimensions": {
+        "time": "2025-02-05",
+        "company": "XBIO",
+        "eventType": "Financing",
+        "score": 0.36,
+        "source": "SEC Filing",
+        "impact": 32
+      }
+    },
+    {
+      "id": "node-030",
+      "label": "XBIO – Phase 2 immune response",
+      "dimensions": {
+        "time": "2025-06-07",
+        "company": "XBIO",
+        "eventType": "Phase 2 readout",
+        "score": 0.67,
+        "source": "Company PR",
+        "impact": 66
+      }
+    },
+    {
+      "id": "node-031",
+      "label": "XBIO – Phase 3 efficacy trend",
+      "dimensions": {
+        "time": "2025-09-30",
+        "company": "XBIO",
+        "eventType": "Phase 3 readout",
+        "score": 0.79,
+        "source": "Conference Abstract",
+        "impact": 81
+      }
+    },
+    {
+      "id": "node-032",
+      "label": "QGEN – Diagnostics alliance",
+      "dimensions": {
+        "time": "2024-11-22",
+        "company": "QGEN",
+        "eventType": "Partnership",
+        "score": 0.58,
+        "source": "PR Newswire",
+        "impact": 57
+      }
+    },
+    {
+      "id": "node-033",
+      "label": "QGEN – FDA clearance",
+      "dimensions": {
+        "time": "2025-01-17",
+        "company": "QGEN",
+        "eventType": "Regulatory",
+        "score": 0.63,
+        "source": "FDA",
+        "impact": 63
+      }
+    },
+    {
+      "id": "node-034",
+      "label": "QGEN – Financing outlook updated",
+      "dimensions": {
+        "time": null,
+        "company": "QGEN",
+        "eventType": "Financing",
+        "score": 0.47,
+        "source": "Investor Deck",
+        "impact": 45
+      }
+    },
+    {
+      "id": "node-035",
+      "label": "QGEN – Phase 2 assay results",
+      "dimensions": {
+        "time": "2025-08-26",
+        "company": "QGEN",
+        "eventType": "Phase 2 readout",
+        "score": 0.72,
+        "source": "Conference Abstract",
+        "impact": 70
+      }
+    },
+    {
+      "id": "node-036",
+      "label": "QGEN – Phase 3 accuracy data",
+      "dimensions": {
+        "time": "2025-12-14",
+        "company": "QGEN",
+        "eventType": "Phase 3 readout",
+        "score": 0.76,
+        "source": "Company PR",
+        "impact": 79
       }
     }
   ]
