@@ -14,7 +14,6 @@ export function App() {
     isLoading,
     error,
     attemptedThirdDimension,
-    toggleDimension,
   } = useAppState();
 
   const selectedNode = nodes.find((node) => node.id === selectedNodeId);
@@ -46,11 +45,7 @@ export function App() {
 
   return (
     <div className="app-shell">
-      <DimensionSelector
-        dimensions={dimensions}
-        selectedDimensions={selectedDimensions}
-        onToggleDimension={toggleDimension}
-      />
+      <DimensionSelector />
       <section className="panel">
         {attemptedThirdDimension && (
           <div className="notice">3D view not implemented in v0 – will be added later.</div>
