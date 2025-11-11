@@ -30,8 +30,7 @@ function parseNumber(value: string | number | null | undefined) {
 }
 
 export function View1D() {
-  const { filteredNodes, dimensions, selectedDimensions, selectedNodeId, selectNode } =
-    useAppState();
+  const { nodes, dimensions, selectedDimensions, selectedNodeId, selectNode } = useAppState();
 
   if (selectedDimensions.length !== 1) {
     return <div className="placeholder">Select exactly one dimension to use the 1D view.</div>;
@@ -42,6 +41,10 @@ export function View1D() {
 
   if (!dimension) {
     return <div className="placeholder">Selected dimension could not be found.</div>;
+  }
+
+  if (nodes.length === 0) {
+    return <div className="placeholder">No data to display for this dimension.</div>;
   }
 
   const listStyle: React.CSSProperties = { listStyle: "none", padding: 0, margin: 0 };
@@ -57,19 +60,8 @@ export function View1D() {
 
   let content: JSX.Element | JSX.Element[];
 
-  if (filteredNodes.length === 0) {
-    return (
-      <section>
-        <h2>
-          1D View – Dimension: {dimension.name} ({dimension.kind})
-        </h2>
-        <div className="placeholder">No data matches the current filters.</div>
-      </section>
-    );
-  }
-
   if (dimension.kind === "datetime") {
-    const sortedNodes = [...filteredNodes].sort((a, b) => {
+    const sortedNodes = [...nodes].sort((a, b) => {
       const aValue = parseDate(a.dimensions[dimension.id]);
       const bValue = parseDate(b.dimensions[dimension.id]);
 
@@ -106,7 +98,7 @@ export function View1D() {
       </ul>
     );
   } else if (dimension.kind === "numeric") {
-    const sortedNodes = [...filteredNodes].sort((a, b) => {
+    const sortedNodes = [...nodes].sort((a, b) => {
       const aValue = parseNumber(a.dimensions[dimension.id]);
       const bValue = parseNumber(b.dimensions[dimension.id]);
 
@@ -147,7 +139,7 @@ export function View1D() {
   } else {
     const groups = new Map<string, typeof nodes>();
 
-    filteredNodes.forEach((node) => {
+    nodes.forEach((node) => {
       const rawValue = node.dimensions[dimension.id];
       const groupKey = formatValue(rawValue);
       if (!groups.has(groupKey)) {
