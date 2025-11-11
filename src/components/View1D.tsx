@@ -1,4 +1,9 @@
+import type { Dimension } from "../model/types";
 import { useAppState } from "../state/useAppState";
+
+type View1DProps = {
+  dimension?: Dimension;
+};
 
 function formatValue(value: string | number | null | undefined) {
   if (value === null || value === undefined || value === "") {
@@ -29,7 +34,7 @@ function parseNumber(value: string | number | null | undefined) {
   return null;
 }
 
-export function View1D() {
+export function View1D(_props: View1DProps) {
   const { nodes, dimensions, selectedDimensions, selectedNodeId, selectNode } = useAppState();
 
   if (selectedDimensions.length !== 1) {

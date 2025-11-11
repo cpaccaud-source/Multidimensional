@@ -6,6 +6,11 @@ type RawValue = string | number | null;
 
 type Normalizer = (value: RawValue) => number;
 
+interface LegacyView2DProps {
+  xDimension?: Dimension;
+  yDimension?: Dimension;
+}
+
 function toNumber(value: RawValue): number | null {
   if (value === null || value === "") {
     return null;
@@ -116,7 +121,7 @@ function buildNormalizer(nodes: Node[], dimension: Dimension): Normalizer {
   }
 }
 
-export function View2D() {
+export function View2D(_props?: LegacyView2DProps) {
   const { nodes, dimensions, selectedDimensions, selectedNodeId, selectNode } =
     useAppState();
 
