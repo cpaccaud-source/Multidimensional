@@ -167,7 +167,7 @@ function buildAxis(nodes: Node[], dimension: Dimension): AxisConfig {
 }
 
 export function View2D() {
-  const { filteredNodes, dimensions, selectedDimensions, selectedNodeId, selectNode } =
+  const { nodes, dimensions, selectedDimensions, selectedNodeId, selectNode } =
     useAppState();
 
   if (selectedDimensions.length !== 2) {
@@ -182,22 +182,15 @@ export function View2D() {
     return <p>Selected dimensions could not be found.</p>;
   }
 
-  if (filteredNodes.length === 0) {
-    return (
-      <div>
-        <h2>
-          2D View – X: {dimX.name} ({dimX.kind}) Y: {dimY.name} ({dimY.kind})
-        </h2>
-        <p>No data matches the current filters.</p>
-      </div>
-    );
+  if (nodes.length === 0) {
+    return <p>No data available for 2D view.</p>;
   }
 
   const axis = useMemo(() => {
-    const axisX = buildAxis(filteredNodes, dimX);
-    const axisY = buildAxis(filteredNodes, dimY);
+    const axisX = buildAxis(nodes, dimX);
+    const axisY = buildAxis(nodes, dimY);
     return { axisX, axisY };
-  }, [filteredNodes, dimX, dimY]);
+  }, [nodes, dimX, dimY]);
 
   const width = 600;
   const height = 400;
@@ -205,7 +198,7 @@ export function View2D() {
   const innerWidth = width - padding * 2;
   const innerHeight = height - padding * 2;
 
-  const points = filteredNodes.map((node) => {
+  const points = nodes.map((node) => {
     const rawX = node.dimensions[dimX.id] ?? null;
     const rawY = node.dimensions[dimY.id] ?? null;
     const tX = axis.axisX.normalize(rawX);
