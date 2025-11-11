@@ -6,9 +6,14 @@ type RawValue = string | number | null;
 
 type Normalizer = (value: RawValue) => number;
 
-interface LegacyView2DProps {
-  xDimension?: Dimension;
-  yDimension?: Dimension;
+interface AxisTick {
+  label: string;
+  position: number;
+}
+
+interface AxisConfig {
+  normalize: Normalizer;
+  ticks: AxisTick[];
 }
 
 function toNumber(value: RawValue): number | null {
@@ -22,29 +27,46 @@ function toNumber(value: RawValue): number | null {
   return Number.isFinite(parsed) ? parsed : null;
 }
 
-function buildNumericNormalizer(nodes: Node[], dimension: Dimension): Normalizer {
+function buildNumericAxis(nodes: Node[], dimension: Dimension): AxisConfig {
   const values = nodes
     .map((node) => toNumber(node.dimensions[dimension.id] ?? null))
     .filter((value): value is number => value !== null);
 
   if (values.length === 0) {
-    return () => 0.5;
+    return { normalize: () => 0.5, ticks: [] };
   }
 
   const min = Math.min(...values);
   const max = Math.max(...values);
 
   if (min === max) {
-    return () => 0.5;
+    return {
+      normalize: () => 0.5,
+      ticks: [
+        {
+          label: String(min),
+          position: 0.5,
+        },
+      ],
+    };
   }
 
-  return (value: RawValue) => {
+  const normalize: Normalizer = (value) => {
     const numeric = toNumber(value);
     if (numeric === null) {
       return 0.5;
     }
     return (numeric - min) / (max - min);
   };
+
+  const mid = (min + max) / 2;
+  const ticks: AxisTick[] = [
+    { label: String(min), position: 0 },
+    { label: String(Number.isInteger(mid) ? mid : Number(mid.toFixed(2))), position: 0.5 },
+    { label: String(max), position: 1 },
+  ];
+
+  return { normalize, ticks };
 }
 
 function toTimestamp(value: RawValue): number | null {
@@ -56,32 +78,45 @@ function toTimestamp(value: RawValue): number | null {
   return Number.isNaN(time) ? null : time;
 }
 
-function buildDatetimeNormalizer(nodes: Node[], dimension: Dimension): Normalizer {
+function buildDatetimeAxis(nodes: Node[], dimension: Dimension): AxisConfig {
   const values = nodes
     .map((node) => toTimestamp(node.dimensions[dimension.id] ?? null))
     .filter((value): value is number => value !== null);
 
   if (values.length === 0) {
-    return () => 0.5;
+    return { normalize: () => 0.5, ticks: [] };
   }
 
   const min = Math.min(...values);
   const max = Math.max(...values);
 
   if (min === max) {
-    return () => 0.5;
+    const label = new Date(min).toISOString().slice(0, 10);
+    return {
+      normalize: () => 0.5,
+      ticks: [{ label, position: 0.5 }],
+    };
   }
 
-  return (value: RawValue) => {
+  const normalize: Normalizer = (value) => {
     const timestamp = toTimestamp(value);
     if (timestamp === null) {
       return 0.5;
     }
     return (timestamp - min) / (max - min);
   };
+
+  const mid = new Date((min + max) / 2).toISOString().slice(0, 10);
+  const ticks: AxisTick[] = [
+    { label: new Date(min).toISOString().slice(0, 10), position: 0 },
+    { label: mid, position: 0.5 },
+    { label: new Date(max).toISOString().slice(0, 10), position: 1 },
+  ];
+
+  return { normalize, ticks };
 }
 
-function buildCategoricalNormalizer(nodes: Node[], dimension: Dimension): Normalizer {
+function buildCategoricalAxis(nodes: Node[], dimension: Dimension): AxisConfig {
   const categorySet = new Set<string>();
   nodes.forEach((node) => {
     const raw = node.dimensions[dimension.id];
@@ -90,38 +125,48 @@ function buildCategoricalNormalizer(nodes: Node[], dimension: Dimension): Normal
   });
 
   if (categorySet.size === 0) {
-    return () => 0.5;
+    return { normalize: () => 0.5, ticks: [] };
   }
 
   const categories = Array.from(categorySet).sort((a, b) => a.localeCompare(b));
 
   if (categories.length === 1) {
-    return () => 0.5;
+    return {
+      normalize: () => 0.5,
+      ticks: [{ label: categories[0], position: 0.5 }],
+    };
   }
 
   const steps = categories.length - 1;
   const positions = new Map(categories.map((category, index) => [category, index / steps]));
 
-  return (value: RawValue) => {
+  const normalize: Normalizer = (value) => {
     const label = value === null || value === "" ? "(no value)" : String(value);
     return positions.get(label) ?? 0.5;
   };
+
+  const ticks: AxisTick[] = categories.map((category) => ({
+    label: category,
+    position: positions.get(category) ?? 0.5,
+  }));
+
+  return { normalize, ticks };
 }
 
-function buildNormalizer(nodes: Node[], dimension: Dimension): Normalizer {
+function buildAxis(nodes: Node[], dimension: Dimension): AxisConfig {
   switch (dimension.kind) {
     case "numeric":
-      return buildNumericNormalizer(nodes, dimension);
+      return buildNumericAxis(nodes, dimension);
     case "datetime":
-      return buildDatetimeNormalizer(nodes, dimension);
+      return buildDatetimeAxis(nodes, dimension);
     case "categorical":
-      return buildCategoricalNormalizer(nodes, dimension);
+      return buildCategoricalAxis(nodes, dimension);
     default:
-      return () => 0.5;
+      return { normalize: () => 0.5, ticks: [] };
   }
 }
 
-export function View2D(_props?: LegacyView2DProps) {
+export function View2D() {
   const { nodes, dimensions, selectedDimensions, selectedNodeId, selectNode } =
     useAppState();
 
@@ -141,10 +186,10 @@ export function View2D(_props?: LegacyView2DProps) {
     return <p>No data available for 2D view.</p>;
   }
 
-  const normalizers = useMemo(() => {
-    const normalizeX = buildNormalizer(nodes, dimX);
-    const normalizeY = buildNormalizer(nodes, dimY);
-    return { normalizeX, normalizeY };
+  const axis = useMemo(() => {
+    const axisX = buildAxis(nodes, dimX);
+    const axisY = buildAxis(nodes, dimY);
+    return { axisX, axisY };
   }, [nodes, dimX, dimY]);
 
   const width = 600;
@@ -156,8 +201,8 @@ export function View2D(_props?: LegacyView2DProps) {
   const points = nodes.map((node) => {
     const rawX = node.dimensions[dimX.id] ?? null;
     const rawY = node.dimensions[dimY.id] ?? null;
-    const tX = normalizers.normalizeX(rawX);
-    const tY = normalizers.normalizeY(rawY);
+    const tX = axis.axisX.normalize(rawX);
+    const tY = axis.axisY.normalize(rawY);
     const x = padding + tX * innerWidth;
     const y = height - padding - tY * innerHeight;
     return { node, x, y };
@@ -177,6 +222,52 @@ export function View2D(_props?: LegacyView2DProps) {
           fill="none"
           stroke="#ccc"
         />
+        {axis.axisX.ticks.map((tick) => {
+          const x = padding + tick.position * innerWidth;
+          return (
+            <g key={`x-${tick.label}`}>
+              <line
+                x1={x}
+                x2={x}
+                y1={height - padding}
+                y2={height - padding + 6}
+                stroke="#888"
+              />
+              <text
+                x={x}
+                y={height - padding + 18}
+                textAnchor="middle"
+                fontSize={10}
+                fill="#333"
+              >
+                {tick.label}
+              </text>
+            </g>
+          );
+        })}
+        {axis.axisY.ticks.map((tick) => {
+          const y = height - padding - tick.position * innerHeight;
+          return (
+            <g key={`y-${tick.label}`}>
+              <line
+                x1={padding - 6}
+                x2={padding}
+                y1={y}
+                y2={y}
+                stroke="#888"
+              />
+              <text
+                x={padding - 10}
+                y={y + 4}
+                textAnchor="end"
+                fontSize={10}
+                fill="#333"
+              >
+                {tick.label}
+              </text>
+            </g>
+          );
+        })}
         <text x={width / 2} y={height - 5} textAnchor="middle" fontSize={12} fill="#555">
           {dimX.name}
         </text>
