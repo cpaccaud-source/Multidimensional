@@ -74,14 +74,12 @@ export function DimensionSelector() {
     nodes,
     selectedDimensions,
     toggleDimension,
+    filters,
     updateNumericFilter,
     updateDatetimeFilter,
     updateCategoricalFilter,
     clearFilter,
-    filters: rawFilters,
   } = useAppState();
-
-  const filters = rawFilters ?? {};
 
   const numericExtents = useMemo(() => {
     const result = new Map<string, { min: number | null; max: number | null }>();
