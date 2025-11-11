@@ -1,4 +1,12 @@
-import { useEffect, useMemo, useState } from "react";
+import type { ReactNode } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { loadData } from "../data/loadData";
 import type { AppState } from "../model/types";
 
@@ -17,20 +25,27 @@ const initialState: AppState = {
   selectedNodeId: null,
 };
 
-export function useAppState(): UseAppStateValue {
+const AppStateContext = createContext<UseAppStateValue | undefined>(undefined);
+
+interface AppStateProviderProps {
+  children: ReactNode;
+}
+
+export function AppStateProvider({ children }: AppStateProviderProps) {
   const [state, setState] = useState<AppState>(initialState);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [attemptedThirdDimension, setAttemptedThirdDimension] = useState(false);
 
   useEffect(() => {
-    let mounted = true;
+    let cancelled = false;
 
     loadData()
       .then((data) => {
-        if (!mounted) {
+        if (cancelled) {
           return;
         }
+
         setState((prev) => ({
           ...prev,
           nodes: data.nodes,
@@ -38,23 +53,26 @@ export function useAppState(): UseAppStateValue {
           selectedNodeId: prev.selectedNodeId ?? data.nodes[0]?.id ?? null,
         }));
         setIsLoading(false);
+        setError(null);
       })
       .catch((err: unknown) => {
-        if (!mounted) {
+        if (cancelled) {
           return;
         }
+
         setError(err instanceof Error ? err.message : String(err));
         setIsLoading(false);
       });
 
     return () => {
-      mounted = false;
+      cancelled = true;
     };
   }, []);
 
-  const toggleDimension = (dimensionId: string) => {
+  const toggleDimension = useCallback((dimensionId: string) => {
     setState((prev) => {
       const alreadySelected = prev.selectedDimensions.includes(dimensionId);
+
       if (alreadySelected) {
         setAttemptedThirdDimension(false);
         return {
@@ -74,16 +92,16 @@ export function useAppState(): UseAppStateValue {
         selectedDimensions: [...prev.selectedDimensions, dimensionId],
       };
     });
-  };
+  }, []);
 
-  const selectNode = (nodeId: string | null) => {
+  const selectNode = useCallback((nodeId: string | null) => {
     setState((prev) => ({
       ...prev,
       selectedNodeId: nodeId,
     }));
-  };
+  }, []);
 
-  return useMemo(
+  const value = useMemo<UseAppStateValue>(
     () => ({
       ...state,
       isLoading,
@@ -92,6 +110,18 @@ export function useAppState(): UseAppStateValue {
       toggleDimension,
       selectNode,
     }),
-    [state, isLoading, error, attemptedThirdDimension]
+    [state, isLoading, error, attemptedThirdDimension, toggleDimension, selectNode]
   );
+
+  return <AppStateContext.Provider value={value}>{children}</AppStateContext.Provider>;
+}
+
+export function useAppState(): UseAppStateValue {
+  const context = useContext(AppStateContext);
+
+  if (!context) {
+    throw new Error("useAppState must be used within an AppStateProvider");
+  }
+
+  return context;
 }
