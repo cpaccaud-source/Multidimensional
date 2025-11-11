@@ -74,11 +74,11 @@ export function DimensionSelector() {
     nodes,
     selectedDimensions,
     toggleDimension,
+    filters,
     updateNumericFilter,
     updateDatetimeFilter,
     updateCategoricalFilter,
     clearFilter,
-    filters: rawFilters,
   } = useAppState();
 
   const numericExtents = useMemo(() => {
@@ -139,7 +139,7 @@ export function DimensionSelector() {
       <div>
         {dimensions.map((dimension) => {
           const checked = selectedDimensions.includes(dimension.id);
-          const filter = rawFilters?.[dimension.id];
+          const filter = filters[dimension.id];
           const numericExtent = dimension.kind === "numeric" ? numericExtents.get(dimension.id) : undefined;
           const datetimeExtent = dimension.kind === "datetime" ? datetimeExtents.get(dimension.id) : undefined;
           const categoricalValues = dimension.kind === "categorical"
