@@ -14,16 +14,9 @@ export function App() {
     isLoading,
     error,
     attemptedThirdDimension,
-    toggleDimension,
   } = useAppState();
 
   const selectedNode = nodes.find((node) => node.id === selectedNodeId);
-  const selectedDimensionObjects = selectedDimensions
-    .map((id) => dimensions.find((dimension) => dimension.id === id))
-    .filter((dimension): dimension is NonNullable<typeof dimension> => Boolean(dimension));
-
-  const primaryDimension = selectedDimensionObjects[0];
-  const secondaryDimension = selectedDimensionObjects[1];
 
   let panelBody: JSX.Element;
 
@@ -43,18 +36,16 @@ export function App() {
       </div>
     );
   } else if (selectedDimensions.length === 1) {
-    panelBody = <View1D dimension={primaryDimension} />;
+    panelBody = <View1D />;
+  } else if (selectedDimensions.length === 2) {
+    panelBody = <View2D />;
   } else {
-    panelBody = <View2D xDimension={primaryDimension} yDimension={secondaryDimension} />;
+    panelBody = <div className="placeholder">Select up to two dimensions to visualize.</div>;
   }
 
   return (
     <div className="app-shell">
-      <DimensionSelector
-        dimensions={dimensions}
-        selectedDimensions={selectedDimensions}
-        onToggleDimension={toggleDimension}
-      />
+      <DimensionSelector />
       <section className="panel">
         {attemptedThirdDimension && (
           <div className="notice">3D view not implemented in v0 – will be added later.</div>
