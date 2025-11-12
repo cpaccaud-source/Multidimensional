@@ -286,7 +286,7 @@ export function DimensionSelector() {
               )}
             </div>
           );
-        })}
+        )}
       </div>
       <div className="dimensions-info">
         <div>ℹ️ Select up to 2 dimensions at a time.</div>

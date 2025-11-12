@@ -13,7 +13,13 @@ export async function loadData(): Promise<LoadedData> {
 
   const raw = (await response.json()) as LoadedData;
   return {
-    nodes: raw.nodes ?? [],
+    nodes: (raw.nodes ?? []).map((node) => ({
+      ...node,
+      dimensions:
+        node && typeof node.dimensions === "object" && node.dimensions !== null
+          ? node.dimensions
+          : {},
+    })),
     dimensions: raw.dimensions ?? [],
   };
 }
